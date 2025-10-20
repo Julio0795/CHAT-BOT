@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="card">
+    <h2>Personality Profile</h2>
+
+    <div class="list">
+      {% for trait in personality_profile %}
+        <form action="/update_personality/{{ loop.index0 }}" method="post" class="trait-row">
+          <textarea name="trait" class="autosize">{{ trait }}</textarea>
+          <div class="trait-actions">
+            <button class="btn" type="submit">Save</button>
+            <button class="btn secondary" formaction="/remove_personality/{{ loop.index0 }}" formmethod="post">Remove</button>
+          </div>
+        </form>
+      {% endfor %}
+    </div>
+
+    <form action="/add_personality" method="post" class="add-trait-form">
+      <textarea name="trait" placeholder="New trait…" class="autosize"></textarea>
+      <div class="toolbar">
+        <button class="btn" type="submit">Add Trait</button>
+        <a class="btn ghost" href="/dashboard">Back to Dashboard</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function autosize(el) {
+      el.style.height = "auto";
+      el.style.height = el.scrollHeight + "px";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const textareas = document.querySelectorAll("textarea.autosize");
+      textareas.forEach(ta => {
+        autosize(ta);
+        ta.addEventListener("input", () => autosize(ta));
+      });
+
+      // Initial fix after rendering + font load
+      setTimeout(() => textareas.forEach(ta => autosize(ta)), 100);
+      if (document.fonts) {
+        document.fonts.ready.then(() => {
+          textareas.forEach(ta => autosize(ta));
+        });
+      }
+    });
+  </script>
+{% endblock %}

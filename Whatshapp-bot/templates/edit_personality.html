@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Personality Trait</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Personality Trait</h1>
+    <hr>
+    <form method="post"
+          action="{{ url_for('update_personality', idx=idx) }}"
+          class="edit-form">
+      <input name="trait"
+             value="{{ trait }}"
+             placeholder="Update your trait…"
+             required>
+      <button type="submit" class="btn-add">Save</button>
+      <a href="{{ url_for('index') }}" class="btn-cancel">Cancel</a>
+    </form>
+  </div>
+</body>
+</html>

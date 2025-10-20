@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Julio — WhatsApp Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav">
+      <!-- Brand now acts as Dashboard link -->
+      <a href="/dashboard" class="brand {% if request.path == '/dashboard' %}active{% endif %}">
+        Julio Assistant
+      </a>
+      
+      <a href="/nav/sync" class="{% if request.path == '/nav/sync' %}active{% endif %}">
+        Sync from WhatsApp Export
+      </a>
+      <a href="/nav/profile" class="{% if request.path == '/nav/profile' %}active{% endif %}">
+        My Profile Facts
+      </a>
+      <a href="/nav/personality" class="{% if request.path == '/nav/personality' %}active{% endif %}">
+        Personality Profile
+      </a>
+      <a href="/nav/contacts" class="{% if request.path == '/nav/contacts' %}active{% endif %}">
+        Allowed WhatsApp Contacts
+      </a>
+    </nav>
+
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</body>
+</html>

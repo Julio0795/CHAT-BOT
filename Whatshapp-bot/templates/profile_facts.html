@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="card">
+    <h2>“My Profile” Facts</h2>
+
+    <div class="list">
+      {% for fact in my_profile %}
+        <form action="/update_fact/{{ loop.index0 }}" method="post" class="fact-row">
+          <textarea name="fact" class="autosize">{{ fact }}</textarea>
+          <div class="fact-actions">
+            <button class="btn" type="submit">Save</button>
+            <button class="btn secondary" formaction="/remove_fact/{{ loop.index0 }}" formmethod="post">Remove</button>
+          </div>
+        </form>
+      {% endfor %}
+    </div>
+
+    <!-- Add new fact -->
+    <form action="/add_fact" method="post" class="add-fact-form">
+      <textarea name="fact" placeholder="New fact…" class="autosize"></textarea>
+      <div class="toolbar">
+        <button class="btn" type="submit">Add Fact</button>
+        <a class="btn ghost" href="/dashboard">Back to Dashboard</a>
+      </div>
+    </form>
+  </div>
+
+<script>
+  function autosize(el) {
+    el.style.height = "auto";              // reset height
+    el.style.overflowY = "hidden";         // hide scrollbars
+    el.style.height = el.scrollHeight + "px";  // expand to fit content
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const textareas = document.querySelectorAll("textarea.autosize");
+
+    // Initial sizing for ALL textareas (even pre-filled long ones)
+    textareas.forEach(ta => autosize(ta));
+
+    // Resize dynamically when typing
+    textareas.forEach(ta => {
+      ta.addEventListener("input", () => autosize(ta));
+    });
+
+    // Double check after page render
+    window.addEventListener("load", () => {
+      textareas.forEach(ta => autosize(ta));
+    });
+
+    // If fonts affect sizing, adjust again
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        textareas.forEach(ta => autosize(ta));
+      });
+    }
+  });
+</script>
+{% endblock %}

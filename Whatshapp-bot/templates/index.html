@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="card">
+    <h2>Approval Mode</h2>
+    <form action="/toggle_approval" method="post" class="toolbar top-gap">
+      {% if approval_enabled %}
+        <span class="chip">On</span>
+        <button class="btn secondary" type="submit">Disable Approval</button>
+      {% else %}
+        <span class="chip">Off</span>
+        <button class="btn" type="submit">Enable Approval</button>
+      {% endif %}
+    </form>
+  </div>
+
+  <div class="card top-gap">
+    <h2>Knowledge Gaps</h2>
+    {% if knowledge_gaps and knowledge_gaps|length %}
+      {% for gap in knowledge_gaps %}
+        <div class="card" style="margin:8px 0; padding:8px">
+          <div><strong>Missing Info:</strong> {{ gap }}</div>
+          <form action="/add_knowledge_gap" method="post" class="toolbar top-gap">
+            <input type="hidden" name="gap" value="{{ gap }}">
+            <input type="text" name="gap_value" placeholder="Type your answer here..." style="flex:1; min-width:240px;" required>
+            <select name="target" class="chip">
+              <option value="facts">Add to Facts</option>
+              <option value="personality">Add to Personality</option>
+            </select>
+            <button class="btn" type="submit">Add Info</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="muted">No knowledge gaps detected 🎉</div>
+    {% endif %}
+  </div>
+
+  <!-- 🎯 Notifications -->
+<div class="card top-gap">
+  <h2>Notifications</h2>
+  {% if notifications and notifications|length %}
+    {% for n in notifications %}
+      <div class="card" style="margin:6px 0; padding:8px;">
+        <div><strong>Contact:</strong> {{ n.jid }}</div>
+        <div><strong>Message:</strong> {{ n.message }}</div>
+        <div class="muted" style="font-size: 0.85em;">🕓 {{ n.ts }}</div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="muted">No new notifications 🎉</div>
+  {% endif %}
+</div>
+
+
+  <div class="card top-gap">
+    <h2>Pending Replies for Approval</h2>
+    {% if pending_for_approval and pending_for_approval|length %}
+      {% for item in pending_for_approval %}
+        <div class="card" style="margin:12px 0; padding:12px">
+          <div class="muted">
+            From:
+            {% set allowed = (allowed_contacts | selectattr("jid","equalto",item.jid) | list) %}
+            {% if allowed and allowed[0].name %}
+              {{ allowed[0].name }} ({{ item.jid }})
+            {% else %}
+              {{ item.jid }}
+            {% endif %}
+          </div>
+          <div style="margin:8px 0"><strong>They wrote:</strong> {{ item.user_msg }}</div>
+          <div class="muted">GPT suggested:</div>
+
+          <!-- STEP 3: autosize textarea (class=autosize) -->
+          <form action="/approve_with_edit/{{ loop.index0 }}" method="post" style="margin-top:8px">
+            <textarea name="edited_reply" class="autosize" rows="2">{{ item.reply }}</textarea>
+            <div class="toolbar top-gap">
+              <button class="btn" formaction="/approve_reply/{{ loop.index0 }}" formmethod="post">Approve</button>
+              <button class="btn secondary" type="submit">Approve Edited</button>
+              <button class="btn ghost" formaction="/reject_reply/{{ loop.index0 }}" formmethod="post" type="submit">Reject</button>
+            </div>
+          </form>
+
+          <!-- STEP 4: regenerate with suggestion -->
+          <form action="/regenerate_reply/{{ loop.index0 }}" method="post" class="toolbar top-gap" style="gap:8px;">
+            <input
+              type="text"
+              name="instruction"
+              placeholder="Regenerate with a suggestion (e.g., more playful, shorter)…"
+              style="flex:1; min-width: 240px;"
+              required
+            />
+            <button class="btn outline" type="submit">Regenerate</button>
+          </form>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="muted">No pending replies.</div>
+    {% endif %}
+  </div>
+
+  <!-- STEP 3: tiny autosize helper -->
+  <script>
+    (function () {
+      function autosize(el) {
+        el.style.height = 'auto';
+        el.style.height = (el.scrollHeight + 2) + 'px';
+      }
+      document.querySelectorAll('textarea.autosize').forEach(function (ta) {
+        autosize(ta);
+        ta.addEventListener('input', function () { autosize(ta); });
+      });
+    })();
+  </script>
+{% endblock %}

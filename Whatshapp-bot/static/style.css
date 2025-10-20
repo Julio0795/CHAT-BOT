@@ -1,0 +1,546 @@
+/* ─── Import a clean, modern font ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+  /* ---- Color System ---- */
+  --bg: #EFE4D2;         /* cream background */
+  --text: #131D4F;       /* ink */
+  --accent: #254D70;     /* deep blue for buttons/links */
+  --secondary: #954C2E;  /* rust */
+  --muted: #7f8c8d;      /* dark gray for muted text */
+
+  --card: #ffffff;       /* card background */
+  --chip: #f4ede1;       /* chip background */
+
+  /* ---- Typography ---- */
+  --font-family: 'Inter', sans-serif;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0;
+  padding: 2rem;
+}
+
+/* ─── Container ──────────────────────────────────────────────────────────── */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--card);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* ─── Navigation Bar ─────────────────────────────────────────────────────── */
+.nav {
+  background: linear-gradient(90deg, var(--accent), var(--text));
+  color: #fff;
+  border-radius: 14px;
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;   /* space brand, links, dashboard */
+  align-items: center;
+  max-width: 1000px;                /* slimmer width */
+  margin: 0 auto 1.5rem auto;       /* center and add spacing below */
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+/* Brand name */
+.nav .brand {
+  font-weight: 700;
+  letter-spacing: .3px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.12);
+}
+
+/* Centered links group */
+.nav .nav-links {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex: 1;
+}
+
+.nav .nav-links a {
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.nav .nav-links a:hover {
+  background: rgba(255,255,255,.15);
+}
+
+.nav .nav-links a.active {
+  background: var(--secondary);
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Dashboard button styled distinct */
+.dashboard-btn {
+  background: var(--secondary);
+  color: #fff !important;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+  text-decoration: none;
+}
+
+.dashboard-btn:hover {
+  background: #7a3b23;
+}
+
+/* ─── Container with separation ─────────────────────────────────────────── */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--card);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  margin-top: 1.5rem;   /* separation from nav */
+}
+
+.nav a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  opacity: .95;
+  transition: background 0.2s;
+}
+
+.nav a:hover {
+  background: rgba(255,255,255,.12);
+}
+
+.nav .brand {
+  font-weight: 700;
+  letter-spacing: .2px;
+  margin-right: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.12);
+}
+
+.nav .spacer {
+  flex: 1;
+}
+
+.nav .chip {
+  background: var(--chip);
+  color: var(--text);
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s;
+}
+
+.nav a.active,
+.nav .chip.active {
+  background: var(--secondary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav .chip:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* ─── Autosize Textarea ─────────────────────────────────────────────────── */
+textarea.autosize {
+  display: block;
+  width: 100%;
+  min-height: 2.2em;
+  resize: none;          /* user can’t drag */
+  overflow-y: hidden;    /* no scrollbars */
+  line-height: 1.4;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+}
+
+/* ─── Headings ───────────────────────────────────────────────────────────── */
+h1, h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+/* ─── Divider ────────────────────────────────────────────────────────────── */
+hr {
+  border: none;
+  height: 1px;
+  background: #ddd;
+  margin: 2rem 0;
+}
+
+/* ─── Lists ──────────────────────────────────────────────────────────────── */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 0.75rem;
+  background: #fafafa;
+}
+
+li:last-child {
+  margin-bottom: 0;
+}
+
+.fact-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+button,
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, opacity 0.2s ease;
+}
+
+.btn.enable {
+  background: #27ae60; /* green */
+  color: #fff;
+}
+.btn.enable:hover {
+  background: #1e874b;
+}
+
+.btn.disable {
+  background: #e74c3c; /* red */
+  color: #fff;
+}
+.btn.disable:hover {
+  background: #c0392b;
+}
+
+
+.btn {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn:hover {
+  background: #1f3d63;
+}
+
+.btn.secondary {
+  background: var(--secondary);
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.btn-add {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-add:hover { background: #2a81b9; }
+.btn-add:active { background: #216a9a; }
+
+.btn-remove {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-remove:hover { background: #c0392b; }
+
+.btn-edit {
+  font-size: 0.9rem;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.btn-edit:hover { opacity: 0.7; }
+
+/* ─── Form Inputs ────────────────────────────────────────────────────────── */
+form {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+input[type="text"],
+input:not([type]),
+select {
+  flex: 1;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+/* ─── Specialized Form Layouts ───────────────────────────────────────────── */
+.add-form,
+.edit-fact-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* ─── Checkbox Styling ───────────────────────────────────────────────────── */
+input[type="checkbox"] {
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  position: relative;
+  margin-right: 0.5rem;
+}
+input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+input[type="checkbox"]:checked::after {
+  content: '✔';
+  color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0.2rem;
+  font-size: 1rem;
+}
+
+/* ─── Approval Section ────────────────────────────────────────────────────── */
+#pending-list {
+  margin-bottom: 2rem;
+}
+.pending-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: start;
+  padding: 1rem;
+  background: var(--card);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+.pending-row strong {
+  font-weight: 600;
+  color: var(--text);
+  align-self: center;
+}
+.pending-row em {
+  color: var(--muted);
+  font-style: normal;
+  line-height: 1.4;
+}
+.pending-row .btn-approve,
+.pending-row .btn-reject {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+.pending-row .btn-approve {
+  background: var(--accent);
+  color: #fff;
+}
+.pending-row .btn-approve:hover { background: #2a81b9; }
+.pending-row .btn-reject {
+  background: #e74c3c;
+  color: #fff;
+}
+.pending-row .btn-reject:hover { background: #c0392b; }
+
+/* ─── Summary Box ─────────────────────────────────────────────────────────── */
+.summary-box {
+  font-size: 0.95rem;
+  color: var(--muted);
+  padding: 0.75rem 1rem;
+  background: #f6f6f6;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}
+
+/* ─── Profile Facts Layout ──────────────────────────────────────────────── */
+.fact-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Textarea inside fact row */
+.fact-row textarea.autosize {
+  width: 100%;
+  border: none;              /* remove double border */
+  outline: none;
+  box-shadow: none;
+  background: transparent;   /* blend with card */
+  padding: 0;                /* align text with card padding */
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: none;
+  overflow: hidden;
+}
+
+/* Actions directly under textarea */
+.fact-actions {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.add-fact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 1.5rem;
+}
+
+.add-fact-form textarea {
+  width: 100%;
+  min-height: 3em;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* ─── Responsive Adjustments ──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  body { padding: 1rem; }
+  .container { padding: 1rem; }
+  h1, h2 { font-size: 1.25rem; }
+  li { flex-direction: column; align-items: flex-start; }
+  .fact-actions, li form { margin-top: 0.5rem; width: 100%; justify-content: flex-start; }
+  .pending-row {
+    grid-template-columns: 1fr;
+  }
+}
+/* ─── Responsive Adjustments ──────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  body { 
+    padding: 1rem; 
+  }
+
+  .container { 
+    padding: 1.2rem; 
+    margin-top: 1rem;
+  }
+
+  /* Headings smaller */
+  h1, h2 { 
+    font-size: 1.25rem; 
+  }
+
+  /* Nav adjustments */
+  .nav { 
+    flex-wrap: wrap; 
+    justify-content: center;
+    text-align: center;
+  }
+  .nav a, .nav .brand, .nav .chip { 
+    padding: 8px 10px; 
+    font-size: 0.9rem; 
+  }
+
+  /* Textareas scale properly */
+  textarea.autosize {
+    font-size: 0.95rem;
+    min-height: 3em;
+  }
+
+  /* Button groups (Save/Remove, etc.) */
+  .fact-actions,
+  .toolbar {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .fact-actions .btn,
+  .toolbar .btn {
+    flex: 1;               /* share space equally */
+    min-width: 45%;        /* don’t shrink too much */
+    max-width: 48%;        /* keep side by side */
+  }
+
+  /* Special case: ghost/remove buttons */
+  .btn.ghost,
+  .btn-remove {
+    flex: 1;
+    max-width: 48%;
+  }
+
+  /* Contact rows */
+  .row.two {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  /* Pending approval rows */
+  .pending-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  /* Input fields full width */
+  input[type="text"],
+  input:not([type]),
+  select,
+  textarea {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  /* Upload & Sync button */
+  .sync-form .btn {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+}

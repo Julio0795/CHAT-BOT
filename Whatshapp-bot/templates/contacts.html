@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="card">
+    <h2>Allowed WhatsApp Contacts</h2>
+
+    <div class="list">
+      {% for c in allowed_contacts %}
+        <div class="card contact-card" data-jid="{{ c.jid }}" style="padding:12px">
+          <form action="/update_contact_name" method="post" class="row two update-form">
+            <input type="hidden" name="jid" value="{{ c.jid }}">
+            <input name="name" value="{{ c.name or '' }}" placeholder="Display name">
+            <div class="toolbar">
+              <button class="btn" type="submit">Save</button>
+
+              <!-- Toggle button -->
+              <button 
+                type="button" 
+                class="btn toggle-btn {{ 'disable' if c.enabled else 'enable' }}" 
+                data-jid="{{ c.jid }}">
+                {{ 'Disable' if c.enabled else 'Enable' }}
+              </button>
+
+              <!-- Remove button (separate form handled via JS) -->
+              <button 
+                type="button" 
+                class="btn ghost remove-btn" 
+                data-jid="{{ c.jid }}">
+                Remove
+              </button>
+
+              <!-- View Profile button -->
+<a class="btn secondary" href="{{ url_for('show_contact_profile', jid=c.jid) }}">
+    View Profile
+</a>
+            </div>
+          </form>
+          <div class="muted">JID: {{ c.jid }}</div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <h3 class="top-gap">Add Contact</h3>
+    <form action="/add_contact" method="post" class="row two">
+      <input name="jid" placeholder="jid@c.us">
+      <div class="toolbar">
+        <button class="btn" type="submit">Add Contact</button>
+        <a class="btn ghost" href="/dashboard">Back to Dashboard</a>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Toggle button handler
+      document.querySelectorAll(".toggle-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const jid = btn.dataset.jid;
+          try {
+            const res = await fetch(`/toggle_contact/${jid}`, { method: "POST" });
+            if (res.ok) {
+              if (btn.classList.contains("disable")) {
+                btn.classList.remove("disable");
+                btn.classList.add("enable");
+                btn.textContent = "Enable";
+              } else {
+                btn.classList.remove("enable");
+                btn.classList.add("disable");
+                btn.textContent = "Disable";
+              }
+            } else {
+              alert("Failed to toggle contact");
+            }
+          } catch (err) {
+            console.error("Toggle error:", err);
+            alert("Error toggling contact");
+          }
+        });
+      });
+
+      // Remove button handler
+      document.querySelectorAll(".remove-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const jid = btn.dataset.jid;
+          if (!confirm(`Remove contact ${jid}?`)) return;
+
+          try {
+            const res = await fetch(`/remove_contact/${jid}`, { method: "POST" });
+            if (res.ok) {
+              // Remove the contact card from DOM
+              const card = btn.closest(".contact-card");
+              if (card) card.remove();
+            } else {
+              alert("Failed to remove contact");
+            }
+          } catch (err) {
+            console.error("Remove error:", err);
+            alert("Error removing contact");
+          }
+        });
+      });
+    });
+  </script>
+{% endblock %}

@@ -1,0 +1,83 @@
+/* Contact profile page specific styling */
+.contact-profile {
+  margin: 20px auto;
+  max-width: 900px;
+}
+
+.autosize-textarea {
+  width: 100%;
+  min-height: 60px;
+  max-height: 400px;
+  resize: none; /* disable manual dragging */
+  padding: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.media-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.media-item {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  padding: 8px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.media-item img,
+.media-item video {
+  max-width: 200px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.media-item:hover {
+  transform: scale(1.05);
+}
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+.lightbox.show {
+  display: flex;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+.chip.success {
+  background-color: #d1fae5;
+  color: #065f46;
+}

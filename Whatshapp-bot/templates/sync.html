@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="card">
+    <h2>Sync from WhatsApp Export (.txt)</h2>
+    <p class="muted">Pick a contact, your label in the export, date order, then upload the exported .txt file.</p>
+
+    <!-- ✅ Show success or error message -->
+    {% if success_message %}
+      <div class="summary-box" style="margin-bottom: 1rem; color: green; font-weight: 600;">
+        {{ success_message }}
+      </div>
+    {% endif %}
+    {% if error_message %}
+      <div class="summary-box" style="margin-bottom: 1rem; color: red; font-weight: 600;">
+        {{ error_message }}
+      </div>
+    {% endif %}
+
+    <form action="/upload_chat" method="post" enctype="multipart/form-data" class="sync-form">
+      <label>Contact JID
+        <select name="jid">
+          {% for c in allowed_contacts %}
+            <option value="{{ c.jid }}">{{ c.name or c.jid }}</option>
+          {% endfor %}
+        </select>
+      </label>
+
+      <label>Your label in export (e.g. “You”, device name)
+        <input type="text" name="self_label" value="{{ self_labels[0] if self_labels else 'You' }}">
+      </label>
+
+      <label>Date format
+        <select name="day_first">
+          <option value="false" {% if not date_day_first %}selected{% endif %}>MM/DD/YYYY</option>
+          <option value="true"  {% if date_day_first %}selected{% endif %}>DD/MM/YYYY</option>
+        </select>
+      </label>
+
+      <label>Exported .txt file
+        <input type="file" name="file" accept=".txt">
+      </label>
+
+      <div class="toolbar">
+        <button class="btn" type="submit">Upload & Sync</button>
+        <a class="btn ghost" href="/dashboard">Back to Dashboard</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='contact_profile.css') }}">
+{% endblock %}
+
+{% block content %}
+  <div class="card contact-profile">
+    <h2>Profile for {{ contact_name }}</h2>
+
+    <!-- Info section -->
+    <h3>Info</h3>
+    <form method="post" action="/update_profile_info/{{ jid }}">
+      <textarea name="info" class="autosize-textarea">{{ profile.info }}</textarea>
+      <button class="btn" type="submit">Save Info</button>
+    </form>
+
+    <!-- Objectives -->
+    <div class="card top-gap">
+      <h2>Objectives</h2>
+
+        <!-- Active Objectives -->
+        <h3>Active Objectives</h3>
+        {% set active_objs = contact.objectives | selectattr("status","equalto","in_progress") | list %}
+        {% if active_objs %}
+          {% for obj in active_objs %}
+            <div class="card" style="margin:8px 0; padding:8px">
+              <div><strong>{{ obj.description }}</strong> <span class="chip">{{ obj.type }}</span></div>
+              <div class="muted">Progress: {{ obj.progress }}/{{ obj.occurrences_needed }}</div>
+              <div class="muted">Strategy: {{ obj.strategy }}</div>
+              <form action="/complete_objective/{{ jid }}/{{ obj.id }}" method="post" style="margin-top:6px">
+                <button class="btn secondary" type="submit">Mark Complete</button>
+              </form>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="muted">No active objectives.</div>
+        {% endif %}
+
+        <!-- Completed Objectives -->
+        <h3 class="top-gap">Completed Objectives</h3>
+        {% set completed_objs = contact.objectives | selectattr("status","equalto","completed") | list %}
+        {% if completed_objs %}
+          {% for obj in completed_objs %}
+            <div class="card" style="margin:8px 0; padding:8px; background:#f8fff8;">
+              <div><strong>{{ obj.description }}</strong> <span class="chip success">Completed</span></div>
+             <div class="muted small">Finished {{ obj.created_at|default("") }}</div>
+
+
+
+
+              {% if obj.notes %}
+                <details style="margin-top:6px">
+                  <summary>View Reflection</summary>
+                  <div class="muted" style="margin-top:4px;">
+                    {{ obj.notes[-1] }}
+                  </div>
+                </details>
+              {% endif %}
+
+              <form action="/delete_objective/{{ jid }}/{{ obj.id }}" method="post" style="margin-top:6px">
+                <button class="btn ghost" type="submit">Delete</button>
+              </form>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="muted">No completed objectives yet.</div>
+        {% endif %}
+
+
+      <!-- Form to add a new objective -->
+      <form action="/add_objective/{{ jid }}" method="post" style="margin-top:12px">
+        <label for="type">Objective Type</label>
+        <select id="type" name="type" required>
+          <option value="linguistic" selected>Linguistic (e.g., make them say “dear”)</option>
+          <option value="behavioral">Behavioral (e.g., get them to ask about your day)</option>
+        </select>
+
+        <label for="description">Objective Description</label>
+        <input type="text" id="description" name="description" placeholder="E.g., Make her call me dear" required />
+
+        <label for="min_days">Min Days</label>
+        <input type="number" id="min_days" name="min_days" value="7" min="1" />
+
+        <label for="max_days">Max Days</label>
+        <input type="number" id="max_days" name="max_days" value="14" min="1" />
+
+        <button class="btn" type="submit" style="margin-top:8px">Add Objective</button>
+      </form>
+
+    </div>
+
+    <!-- Style section -->
+    <h3>Style</h3>
+    <form method="post" action="/update_profile_style/{{ jid }}">
+      <textarea name="style" class="autosize-textarea">{{ profile.style }}</textarea>
+      <button class="btn" type="submit">Save Style</button>
+    </form>
+
+    <!-- Media section -->
+    <h3>Media</h3>
+    <form method="post" action="/update_media_dir/{{ jid }}">
+      <label>Media Folder Path:</label>
+      <input type="text" name="media_dir" value="{{ media_dir or '' }}" placeholder="C:/Users/Julio/Pictures/contact1">
+      <button class="btn" type="submit">Save Folder</button>
+    </form>
+    <button class="btn secondary" id="refresh-media">🔄 Refresh Media</button>
+
+    {% if media_files %}
+      <div class="media-gallery">
+        {% for file in media_files %}
+          {% if file.lower().endswith(('.png','.jpg','.jpeg','.gif','.webp')) %}
+            <div class="media-item">
+              <img src="{{ url_for('serve_media', jid=jid, filename=file) }}"
+                   alt="{{ file }}"
+                   loading="lazy"
+                   class="lightbox-trigger">
+            </div>
+          {% elif file.lower().endswith(('.mp4','.webm','.ogg')) %}
+            <div class="media-item">
+              <video controls preload="none">
+                <source src="{{ url_for('serve_media', jid=jid, filename=file) }}">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          {% else %}
+            <div class="media-item">
+              <a href="{{ url_for('serve_media', jid=jid, filename=file) }}" target="_blank">{{ file }}</a>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="muted">No media files found in this folder.</div>
+    {% endif %}
+
+    <!-- Summary section -->
+    <h3>Summary</h3>
+    {% if summary %}
+      <div class="summary-box">{{ summary }}</div>
+    {% else %}
+      <div class="muted">No summary yet. Click below to generate one.</div>
+    {% endif %}
+    <form method="post" action="/generate_contact_summary/{{ jid }}">
+      <button class="btn secondary" type="submit">Generate Summary</button>
+    </form>
+  </div>
+
+  <!-- Lightbox Modal -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lightbox-close">&times;</span>
+    <img id="lightbox-img" src="" alt="Expanded view">
+  </div>
+
+  <script>
+    // Lightbox handling
+    document.querySelectorAll('.lightbox-trigger').forEach(img => {
+      img.addEventListener('click', () => {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        lightboxImg.src = img.src;
+        lightbox.classList.add('show');
+      });
+    });
+
+    document.getElementById('lightbox-close').addEventListener('click', () => {
+      document.getElementById('lightbox').classList.remove('show');
+    });
+
+    // Refresh media
+    document.getElementById('refresh-media').addEventListener('click', () => {
+      location.reload(); // simple reload for now
+    });
+
+    // Auto resize textareas
+    document.querySelectorAll('.autosize-textarea').forEach(textarea => {
+      const resize = () => {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+      };
+      textarea.addEventListener('input', resize);
+      resize(); // run on page load
+    });
+  </script>
+{% endblock %}
